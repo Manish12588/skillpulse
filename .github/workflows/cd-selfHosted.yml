@@ -10,10 +10,11 @@ jobs:
       - name: Pull repo
         run: |
           if [ ! -d ~/skillpulse ]; then
-          git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git ~/skillpulse
+            git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git ~/skillpulse
+          else
+            cd ~/skillpulse
+            git pull origin main
           fi
-          cd ~/skillpulse
-          git pull origin main
 
       - name: Check .env exists
         run: |
