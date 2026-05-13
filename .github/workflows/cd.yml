@@ -2,14 +2,14 @@ name: CD
 
 on:
   workflow_call:
-  #workflow_run:
+  #workflow_call:
   #  workflows: ["CI"]
   #  types: [completed]
   #  branches: [main]
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    #if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: appleboy/ssh-action@v1
