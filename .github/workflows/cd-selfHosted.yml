@@ -16,11 +16,17 @@ jobs:
             git pull origin main
           fi
 
-      - name: Check .env exists
+      - name: Check .env if not exists
         run: |
           if [ ! -f ~/skillpulse/.env ]; then
-            echo "ERROR: .env missing"
-            exit 1
+            cat > ~/skillpulse/.env << 'EOF'
+            MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+            DB_HOST=${{secrets.DB_HOST}}
+            DB_USER=${{vars.DB_USER}}
+            DB_PASSWORD=${{secrets.DB_PASSWORD}}
+            DB_NAME=${{vars.DB_NAME}}
+            DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
+            echo ".env created from secrests"
           fi
 
       - name: Deploy
