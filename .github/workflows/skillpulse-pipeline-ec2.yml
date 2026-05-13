@@ -12,5 +12,5 @@ jobs:
 
   CD:
     needs: [CI]
-    uses: ./.github/workflows/cd.yml
+    uses: ./.github/workflows/cd-github-ec2.yml
     secrets: inherit
