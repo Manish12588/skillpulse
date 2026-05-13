@@ -16,7 +16,7 @@ jobs:
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_NAME: ${{ vars.DB_NAME }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-    step:
+    steps:
       - name: Clone or pull repo
         uses: appleboy/ssh-action@v1
         with:
