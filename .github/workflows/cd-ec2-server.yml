@@ -67,6 +67,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           envs: DOCKERHUB_USERNAME
           script: |
+            sudo rm -rf ~/skillpulse/mysql
             mkdir -p ~/skillpulse/mysql
             # Download docker-compose.yml
             curl -fsSL https://raw.githubusercontent.com/$GITHUB_REPO_OWNER/skillpulse/main/docker-compose.yml \
@@ -74,6 +75,8 @@ jobs:
             # Download init.sql
             curl -fsSL https://raw.githubusercontent.com/$GITHUB_REPO_OWNER/skillpulse/main/mysql/init.sql \
               -o ~/skillpulse/mysql/init.sql
+          env:
+          GITHUB_REPO_OWNER: ${{ github.repository_owner }}
              
       - name: Deploy
         uses: appleboy/ssh-action@v1
