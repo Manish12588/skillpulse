@@ -10,7 +10,7 @@ jobs:
       - name: Pull repo
         run: |
           if [ ! -d ~/skillpulse ]; then
-            git clone ${{ github.server_url }}/${{ github.repository }}.git ~/skillpulse
+          git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git ~/skillpulse
           fi
           cd ~/skillpulse
           git pull origin main
