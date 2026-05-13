@@ -3,10 +3,10 @@ name: Deploy to Self Hosted Runner
 on: 
   push:
     branches: [main]
-  workflow_dispatch:
-
+ 
 jobs:
   CI:
+<<<<<<< HEAD
     uses: ./.github/workflows/ci.yml
     secrets: inherit
 
@@ -14,3 +14,10 @@ jobs:
     needs: [CI]
     uses: ./.github/workflows/cd-self-hosted.yml
     secrets: inherit
+=======
+    uses: ./.github/workflows/ci/ci.yml
+
+  CD:
+    needs: [CI]
+    uses: ./.github/workflows/cd/cd-self-hosted.yml
+>>>>>>> 807f502 (fix: structured the workflows folder)
