@@ -1,4 +1,4 @@
-name: CD-Self-Hosted_Runner
+name: CD - EC2 Server
 on:
   workflow_dispatch:
 

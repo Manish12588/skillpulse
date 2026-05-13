@@ -1,6 +1,7 @@
-name: CD-Self-Hosted_Runner
+name: CD - Self Hosted Runner
 on:
-  workflow_dispatch:
+  #workflow_dispatch:
+  workflow_call:
 
 jobs:
   deploy:
