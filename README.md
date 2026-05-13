@@ -1,6 +1,6 @@
 # SkillPulse 🚀
 
-A full-stack web application with a complete CI/CD pipeline supporting deployment to both a self-hosted runner and AWS EC2.
+A full-stack skill tracking web application with a complete CI/CD pipeline supporting deployment to both a self-hosted runner and AWS EC2.
 
 ---
 
@@ -19,7 +19,7 @@ A full-stack web application with a complete CI/CD pipeline supporting deploymen
 
 ## About the Project
 
-SkillPulse is a containerized full-stack application built to demonstrate end-to-end DevOps practices including containerization, automated CI/CD pipelines, and multi-environment deployments using GitHub Actions.
+SkillPulse lets you track your skills, log learning sessions, and monitor progress over time. Built to demonstrate end-to-end DevOps practices — containerization, automated CI/CD pipelines, and multi-environment deployments using GitHub Actions.
 
 ---
 
@@ -28,11 +28,10 @@ SkillPulse is a containerized full-stack application built to demonstrate end-to
 ```
 ┌─────────────────────┐
 │  Frontend           │  ← HTML/CSS/JS (Port 80)
-│  (Nginx)            │
 └────────┬────────────┘
          │
 ┌────────▼────────────┐
-│  Backend            │  ← Go API (Port 8080)
+│  Backend            │  ← Go + Gin API (Port 8080)
 └────────┬────────────┘
          │
 ┌────────▼────────────┐
@@ -50,7 +49,7 @@ All services run as Docker containers orchestrated via Docker Compose.
 | Layer | Technology |
 |-------|-----------|
 | Frontend | HTML, CSS, JavaScript |
-| Backend | Go |
+| Backend | Go (Gin framework) |
 | Database | MySQL 8.4 |
 | Containerization | Docker, Docker Compose |
 | CI/CD | GitHub Actions |
@@ -72,16 +71,18 @@ Push to main / Manual Trigger
 │  - Checkout code                │
 │  - Build backend Docker image   │
 │  - Build frontend Docker image  │
-│  - Push to DockerHub            │
+│  - Push images to DockerHub     │
 │    manish12588/skillpulse-*     │
 └────────────────┬────────────────┘
                  │
                  ▼
 ┌─────────────────────────────────┐
 │           CD Pipeline           │
-│  - Clone/pull repo OR           │
-│    pull images from DockerHub   │
+│  - Install Docker (if needed)   │
+│  - Login to DockerHub           │
 │  - Create .env from secrets     │
+│  - Copy docker-compose + SQL    │
+│  - docker compose pull          │
 │  - docker compose up -d         │
 │  - Prune old images             │
 └─────────────────────────────────┘
@@ -92,12 +93,10 @@ Push to main / Manual Trigger
 | File | Purpose |
 |------|---------|
 | `ci.yml` | Build and push Docker images to DockerHub |
-| `cd-selfhosted-github.yml` | Deploy to self-hosted runner via Git clone |
-| `cd-selfhosted-dockerhub.yml` | Deploy to self-hosted runner via DockerHub pull |
-| `cd-ec2-github.yml` | Deploy to AWS EC2 via Git clone over SSH |
-| `cd-ec2-dockerhub.yml` | Deploy to AWS EC2 via DockerHub pull over SSH |
-| `pipeline-selfhosted.yml` | Full pipeline: CI + CD to self-hosted runner |
-| `pipeline-ec2.yml` | Full pipeline: CI + CD to AWS EC2 |
+| `cd-self-hosted.yml` | Deploy to self-hosted runner |
+| `cd-ec2-server.yml` | Deploy to AWS EC2 via SSH |
+| `skillpulse-pipeline-selfhosted.yml` | Full pipeline: CI + CD to self-hosted runner |
+| `skillpulse-pipeline-ec2.yml` | Full pipeline: CI + CD to AWS EC2 |
 
 ---
 
@@ -144,7 +143,7 @@ nano .env
 # Start all services
 docker compose up -d
 
-# Verify services are running
+# Verify all services are running
 docker compose ps
 ```
 
@@ -161,7 +160,7 @@ App will be available at `http://localhost`
 | `DOCKERHUB_TOKEN` | DockerHub access token |
 | `PAT_TOKEN` | GitHub Personal Access Token (repo scope) |
 | `MYSQL_ROOT_PASSWORD` | MySQL root password |
-| `DB_HOST` | Database host |
+| `DB_HOST` | Database host (`db` for Docker network) |
 | `DB_PASSWORD` | Application DB password |
 | `EC2_HOST` | EC2 public IP address |
 | `EC2_USER` | EC2 SSH username (e.g. `ubuntu`) |
@@ -181,14 +180,11 @@ App will be available at `http://localhost`
 ## Environment Variables
 
 ```env
-# Database
 MYSQL_ROOT_PASSWORD=your_root_password
 DB_HOST=db
 DB_USER=skilluser
 DB_PASSWORD=your_password
 DB_NAME=skillpulse
-
-# DockerHub
 DOCKERHUB_USERNAME=your_dockerhub_username
 ```
 
@@ -201,20 +197,18 @@ skillpulse/
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml
-│       ├── cd-selfhosted-github.yml
-│       ├── cd-selfhosted-dockerhub.yml
-│       ├── cd-ec2-github.yml
-│       ├── cd-ec2-dockerhub.yml
-│       ├── pipeline-selfhosted.yml
-│       └── pipeline-ec2.yml
+│       ├── cd-self-hosted.yml
+│       ├── cd-ec2-server.yml
+│       ├── skillpulse-pipeline-selfhosted.yml
+│       └── skillpulse-pipeline-ec2.yml
 ├── backend/
 │   ├── Dockerfile
-│   └── ...              # Go application
+│   └── ...              # Go + Gin application
 ├── frontend/
 │   ├── Dockerfile
 │   └── ...              # HTML/CSS/JS
 ├── mysql/
-│   └── init.sql         # DB initialization
+│   └── init.sql         # DB schema initialization
 ├── docker-compose.yml
 ├── .env.example
 └── README.md
@@ -226,7 +220,18 @@ skillpulse/
 
 | Image | Tags |
 |-------|------|
-| `manish12588/skillpulse-backend` | `latest`, `<git-sha>` |
-| `manish12588/skillpulse-frontend` | `latest`, `<git-sha>` |
+| [`manish12588/skillpulse-backend`](https://hub.docker.com/r/manish12588/skillpulse-backend) | `latest`, `<git-sha>` |
+| [`manish12588/skillpulse-frontend`](https://hub.docker.com/r/manish12588/skillpulse-frontend) | `latest`, `<git-sha>` |
 
 ---
+
+## Credits
+
+Application: [TrainWithShubham/skillpulse](https://github.com/trainwithshubham/skillpulse)
+CI/CD Pipeline & DevOps Implementation: [Manish Kumar](https://www.linkedin.com/in/kumar05/)
+
+---
+
+## License
+
+MIT License
