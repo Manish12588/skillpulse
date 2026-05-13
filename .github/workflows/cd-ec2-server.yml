@@ -13,6 +13,7 @@ jobs:
       DB_USER: ${{ vars.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_NAME: ${{ vars.DB_NAME }}
+      GITHUB_REPO_OWNER: ${{ github.repository_owner }}
     steps:
       - name: Install Docker on EC2
         uses: appleboy/ssh-action@v1
@@ -68,10 +69,10 @@ jobs:
           script: |
             mkdir -p ~/skillpulse/mysql
             # Download docker-compose.yml
-            curl -fsSL https://raw.githubusercontent.com/Manish12588/skillpulse/main/docker-compose.yml \
+            curl -fsSL https://raw.githubusercontent.com/$GITHUB_REPO_OWNER/skillpulse/main/docker-compose.yml \
               -o ~/skillpulse/docker-compose.yml
             # Download init.sql
-            curl -fsSL https://raw.githubusercontent.com/Manish12588/skillpulse/main/mysql/init.sql \
+            curl -fsSL https://raw.githubusercontent.com/$GITHUB_REPO_OWNER/skillpulse/main/mysql/init.sql \
               -o ~/skillpulse/mysql/init.sql
              
       - name: Deploy
