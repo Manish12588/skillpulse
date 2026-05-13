@@ -58,7 +58,7 @@ jobs:
               echo ".env created from secrets"
             fi
             
-      - name: Copy docker-compose.yml to EC2
+      - name: Copy docker-compose.yml and sql file to EC2
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -66,10 +66,13 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           envs: DOCKERHUB_USERNAME
           script: |
-            if [ ! -f ~/skillpulse/docker-compose.yml ]; then
-              curl -fsSL https://raw.githubusercontent.com/Manish12588/skillpulse/main/docker-compose.yml \
-                -o ~/skillpulse/docker-compose.yml
-            fi
+            mkdir -p ~/skillpulse/mysql
+            # Download docker-compose.yml
+            curl -fsSL https://raw.githubusercontent.com/Manish12588/skillpulse/main/docker-compose.yml \
+              -o ~/skillpulse/docker-compose.yml
+            # Download init.sql
+            curl -fsSL https://raw.githubusercontent.com/Manish12588/skillpulse/main/mysql/init.sql \
+              -o ~/skillpulse/mysql/init.sql
              
       - name: Deploy
         uses: appleboy/ssh-action@v1
