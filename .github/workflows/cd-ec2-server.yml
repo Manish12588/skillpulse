@@ -1,6 +1,6 @@
-name: CD - EC2 Server
+name: CD - Deploy on EC2 Server
 on:
-  workflow_dispatch:
+  workflow_call:
 
 jobs:
   deploy:

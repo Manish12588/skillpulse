@@ -1,4 +1,4 @@
-name: Deploy to EC2 Server
+name: Pipeline -  Deploy to EC2 Server
 
 on: 
   #push:
@@ -14,5 +14,5 @@ jobs:
   CD:
     name: Deploy to EC2 Server
     needs: [CI]
-    uses: ./.github/workflows/cd-ec2.yml
+    uses: ./.github/workflows/cd-ec2-server.yml
     secrets: inherit
