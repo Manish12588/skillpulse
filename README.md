@@ -230,17 +230,3 @@ skillpulse/
 | `manish12588/skillpulse-frontend` | `latest`, `<git-sha>` |
 
 ---
-
-## Author
-
-**Manish Kumar**  
-QA Automation Engineer | DevOps Practitioner
-
-- GitHub: [@Manish12588](https://github.com/Manish12588)
-- LinkedIn: [linkedin.com/in/your-profile](https://linkedin.com/in/your-profile)
-
----
-
-## License
-
-MIT License
