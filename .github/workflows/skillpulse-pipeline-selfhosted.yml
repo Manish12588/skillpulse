@@ -6,10 +6,12 @@ on:
  
 jobs:
   CI:
+    name: Build and Push to DockerHub
     uses: ./.github/workflows/ci.yml
     secrets: inherit
 
   CD:
+    name: Deploy to Self Hosted Runner
     needs: [CI]
     uses: ./.github/workflows/cd-self-hosted.yml
     secrets: inherit

@@ -7,10 +7,12 @@ on:
  
 jobs:
   CI:
+    name: Build and Push to DockerHub
     uses: ./.github/workflows/ci.yml
     secrets: inherit
 
   CD:
+    name: Deploy to EC2 Server
     needs: [CI]
-    uses: ./.github/workflows/cd-github-ec2.yml
+    uses: ./.github/workflows/cd-ec2.yml
     secrets: inherit
