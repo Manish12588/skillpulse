@@ -1,0 +1,30 @@
+name: CD-Self-Hosted-Runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Pull repo
+        run: |
+          if [ ! -d ~/skillpulse ]; then
+            git clone ${{ github.server_url }}/${{ github.repository }}.git ~/skillpulse
+          fi
+          cd ~/skillpulse
+          git pull origin main
+
+      - name: Check .env exists
+        run: |
+          if [ ! -f ~/skillpulse/.env ]; then
+            echo "ERROR: .env missing"
+            exit 1
+          fi
+
+      - name: Deploy
+        run: |
+          cd ~/skillpulse
+          docker compose pull
+          docker compose up -d
+          docker image prune -f
