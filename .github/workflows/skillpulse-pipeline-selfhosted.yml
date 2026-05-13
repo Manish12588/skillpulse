@@ -6,10 +6,10 @@ on:
  
 jobs:
   CI:
-    uses: ./.github/workflows/ci/ci.yml
+    uses: ./.github/workflows/ci.yml
     secrets: inherit
 
   CD:
     needs: [CI]
-    uses: ./.github/workflows/cd/cd-self-hosted.yml
+    uses: ./.github/workflows/cd-self-hosted.yml
     secrets: inherit
